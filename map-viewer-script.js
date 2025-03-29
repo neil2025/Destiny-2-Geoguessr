@@ -210,14 +210,11 @@ function showPopup(title, message, correctLatLng, showPlayAgain) {
 
     map.off('click', placeMarker);
     currentMarker.setOpacity(0.5);
+    
+    document.getElementById('submit-button').style.display = 'none';
+    document.getElementById('play-again-button').style.display = 'block';
+    document.getElementById('back-button').style.display = 'none';
 
-    if (showPlayAgain) {
-        document.getElementById('submit-button').style.display = 'none';
-        document.getElementById('play-again-button').style.display = 'block';
-    } else {
-        document.getElementById('submit-button').style.display = 'none';
-        document.getElementById('play-again-button').style.display = 'block';
-    }
 }
 
 // Function to handle the Play Again button click, redirecting to the main menu
