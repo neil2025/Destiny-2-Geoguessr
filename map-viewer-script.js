@@ -67,7 +67,7 @@ function goBack() {
 function initializeMap(mapName) {
     let map = L.map('map', {
         crs: L.CRS.Simple,
-        maxZoom: 2,
+        maxZoom: 3,
         minZoom: -1,
     }).setView([500, 500], 1);
 
