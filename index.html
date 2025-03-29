@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Viewer - Main Menu</title>
+    <link rel="stylesheet" href="index-style.css">
+    
+</head>
+<body>
+    <div>
+        <h1 class="header">SELECT A MAP TO VIEW</h1>
+        <div class="button-container" style="margin-top: 35px;">
+            <div class="button-row">
+                <button class="map-button" onclick="openMap('Cosmodrome')">Cosmodrome</button>
+                <button class="map-button" onclick="openMap('DreamingCity')">Dreaming City</button>
+                <button class="map-button" onclick="openMap('EDZ')">EDZ</button>
+                <button class="map-button" onclick="openMap('Europa')">Europa</button>
+                <button class="map-button" onclick="openMap('Moon')">Moon</button>
+            </div>
+            <div class="button-row">
+                <button class="map-button" onclick="openMap('Neomuna')">Neomuna</button>
+                <button class="map-button" onclick="openMap('Nessus')">Nessus</button>
+                <button class="map-button" onclick="openMap('STW')">Savathun's Throne World</button>
+                <button class="map-button" onclick="openMap('TPH')">The Pale Heart</button>
+            </div>
+            <div class="button-row">
+                <!-- Image Modal -->
+                <div id="image-modal">
+                    <span id="close-btn" onclick="closeModal()">X</span>
+                    <img id="image-popup" src="" alt="Destination Image">
+                    <div id="map-container">
+                        <div id="map"></div>
+                    </div>
+                    
+                </div>
+
+                <button style="margin-top: 35px" id="show-image-btn" onclick="showImage()">Show Location</button>
+            </div>
+            
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="index-script.js"></script>
+</body>
+</html>
