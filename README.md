@@ -19,16 +19,18 @@ Destiny 2 Geoguessr is a fan-made web-based game inspired by GeoGuessr, where yo
 ## File Structure
 ```
 Destiny2Geoguessr/
-│── index.html          # Main game menu
-│── main.html           # Entry point to start the game
-│── main.js             # Handles game start and random location generation
-│── index-script.js     # Handles map selection and modal interactions
-│── locations.js        # Stores location data (images, coordinates, map names)
-│── style.css           # Styling for the main page
-│── index-style.css     # Styling for the map selection page
-│── images/             # Folder containing location images
-│── maps/               # Folder containing map images
-│── README.md           # This file (game documentation)
+│── index.html             # Main game menu
+│── main.html              # Entry point to start the game
+│── main.js                # Handles game start and random location generation
+│── index-script.js        # Handles map selection and modal interactions
+│── locations.js           # Stores location data (images, coordinates, map names)
+│── style.css              # Styling for the main page
+│── index-style.css        # Styling for the map selection page
+│── map-viewer.html        # Displays the selected map, as well as allows for placing guesses and submitting them.
+│── map-viewer-script.js   # Handles map interactions, marker placement, and distance calculation.
+│── images/                # Folder containing location images
+│── maps/                  # Folder containing map images
+│── README.md              # This file (game documentation)
 ```
 
 ## Technologies Used
