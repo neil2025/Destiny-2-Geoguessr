@@ -8,7 +8,7 @@ const locations = [
     {
         name: 'EDZ2',
         image: 'edz2.png',
-        coordinates: [1429.38, 1484.5],
+        coordinates: [1215.75, 1001.25],
         map: 'EDZ'
     },
     {
