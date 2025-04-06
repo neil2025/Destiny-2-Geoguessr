@@ -51,6 +51,7 @@ Destiny2Geoguessr/
 
 ## Future Enhancements
 - **Scoring system**: Award points based on guess accuracy.
+- **Rounds**: Play multiple rounds like in proper GeoGuessr. Unsure how to display all guesses afterwards though...
 - **Multiplayer Mode**: Setting the code up so it runs on a server, allowing you to compete with friends (and just playing online).
 - **More Locations**: Expand the database with additional in-game places.
 - **Improving UI**: The program looks very basic and unpolished... Because it is very basic and unpolished.
