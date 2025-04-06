@@ -21,8 +21,9 @@ button {
 }
 
 #map {
-    height: 400px;
+    height: 700px;
     width: 100%;
+    background-color: black;
 }
 
 .modal {
@@ -39,7 +40,7 @@ button {
 }
 
 .modal-content {
-    background-color: #fefefe;
+    background-color: #5c6470;
     padding: 20px;
     border: 1px solid #888;
     width: 90%;
