@@ -4,34 +4,31 @@
 Destiny 2 Geoguessr is a fan-made web-based game inspired by GeoGuessr, where you must identify in-game locations from Destiny 2. You are shown an image of a random location from the game and must pinpoint its coordinates on one of the different maps.
 
 ## Features
-- **Randomized Locations:** Over 100-200 unique in-game locations with corresponding images and coordinates.
+- **Randomized Locations:** Over 100 unique in-game locations with corresponding images and coordinates!
 - **Interactive Map Selection:** Choose a specific map from various Destiny 2 destinations (e.g., Cosmodrome, Dreaming City, Europa, etc.).
 - **Image-Based Guessing:** Players must match an image to a location and submit their best guess.
-- **Score System (Future Feature):** Track accuracy and "award points" based on proximity. In quotation marks, because it only really calculates distance so far. More on "rounds" and actual scores to come in the future.
+- **Score System:** Track accuracy and "award points" based on proximity.
 
-## How to Play
-1. Click the **Play** button on the main screen.
-2. A random in-game location will be selected. It can be viewed from the grey "Show Location" button which you should be able to see at the bottom of the screen.
-3. Guess where the image was taken by placing your marker on the planet you think the image is taken from.
-4. Submit your guess and compare it to the correct location.
-5. Play again and improve your accuracy!
+## How to play New Version
+There are currently two version. **The "NEW VERSION" is work in progress, and is not polished at all.**
+1. Go to the NEW VERSION folder
+2. Double click the **index.html** file to open the file in your browser.
+3. Press "Play" to start the game. A location should be located on your screen, and if you scroll down there will be a bunch of buttons, each of which will open up their respective map.
+4. Mark your guess on which map and where on the map you think the picture is taken from, by clicking on the map with your mouse.
+5. Press "submit" to submit your guess.
+6. Press next to go to the next round, where you will be presented with a new location.
+7. View your total score and results for each round after all 5 rounds have concluded. Press "play again" to start over, and improve your accuracy! 
 
-## File Structure
-```
-Destiny2Geoguessr/
-│── index.html             # Main game menu
-│── main.html              # Entry point to start the game
-│── main.js                # Handles game start and random location generation
-│── index-script.js        # Handles map selection and modal interactions
-│── locations.js           # Stores location data (images, coordinates, map names)
-│── style.css              # Styling for the main page
-│── index-style.css        # Styling for the map selection page
-│── map-viewer.html        # Displays the selected map, as well as allows for placing guesses and submitting them.
-│── map-viewer-script.js   # Handles map interactions, marker placement, and distance calculation.
-│── images/                # Folder containing location images
-│── maps/                  # Folder containing map images
-│── README.md              # This file (game documentation)
-```
+## How to play Old Version
+There are currently two version. **The "OLD VERSION" is no longer supported, and will not receive any more updates.
+1. Go to the NEW VERSION folder
+2. Double click the **main.html** file to open the file in your browser.
+3. Click the Play button on the main screen.
+4. A random in-game location will be selected. It can be viewed from the grey "Show Location" button which you should be able to see at the bottom of the screen.
+5. Guess where the image was taken by placing your marker on the planet you think the image is taken from.
+6. Submit your guess and compare it to the correct location.
+7. Play again and improve your accuracy!
+
 
 ## Technologies Used
 - **HTML, CSS, JavaScript**: Core web development technologies.
@@ -47,15 +44,14 @@ Destiny2Geoguessr/
    ```sh
    cd Destiny-2-Geoguessr
    ```
-3. **IMPORTANT** Open `main.html` in a web browser. You can do this by just double-clicking the file.
+3. **IMPORTANT** Open either `index.html` or `index.html` depending on which version you are playing in a web browser. You can do this by just double-clicking the file.
 
-## Future Enhancements
-- **Scoring system**: Award points based on guess accuracy.
-- **Rounds**: Play multiple rounds like in proper GeoGuessr. Unsure how to display all guesses afterwards though...
+## Future Enhancements (NEW VERSION Only)
+- **Scoring system**: Developing an algorithm that better rewards points based on distance. For example, I do not the only way of achieving a perfect score to be if the player marks the coordinates to the dot. There should be some lee-way
 - **Multiplayer Mode**: Setting the code up so it runs on a server, allowing you to compete with friends (and just playing online).
 - **More Locations**: Expand the database with additional in-game places.
 - **Improving UI**: The program looks very basic and unpolished... Because it is very basic and unpolished.
-- **Loading maps from Bungie API**: Exchange the stitched-together maps with maps loaded directly from Bungie's API, making navigating the maps much better.
+- **Better maps**: I've received some maps from others that I could update the code with, so the maps are less patched-together. I expect this feature to be coming soon!
 
 ## Credits
 This project is a fan-made tribute to Destiny 2 and is not affiliated with Bungie.
