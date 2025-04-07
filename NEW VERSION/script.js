@@ -161,8 +161,24 @@ function calculatePoints(distance, mapName) {
         return 0;
     }
 
-    return Math.max(1, 1000 - Math.floor(distance));
+    const maxPoints = 1000;
+    const perfectRadius = 35;
+    const falloffRadius = 350;
+
+    if (distance <= perfectRadius) {
+        return maxPoints;
+    }
+
+    if (distance > falloffRadius) {
+        const tailScore = 100 * Math.exp(-0.01 * (distance - falloffRadius));
+        return Math.max(1, Math.floor(tailScore));
+    }
+
+    const decay = (distance - perfectRadius) / (falloffRadius - perfectRadius);
+    const score = maxPoints * Math.pow(1 - decay, 2);
+    return Math.floor(score);
 }
+
 
 function showRoundSummary(guessedCoordinates, actualCoordinates, points, distance, mapName, locationImage) {
     const modal = document.getElementById('map-modal');

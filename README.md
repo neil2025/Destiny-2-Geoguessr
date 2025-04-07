@@ -44,7 +44,7 @@ There are currently two version. **The "OLD VERSION" is no longer supported, and
    ```sh
    cd Destiny-2-Geoguessr
    ```
-3. **IMPORTANT** Open either `index.html` or `main.html` depending on which version you are playing in a web browser. You can do this by just double-clicking the file.
+3. **IMPORTANT** Open either `OPEN_THIS_TO_PLAY.html` or `main.html` depending on which version you are playing in a web browser. You can do this by just double-clicking the file.
 
 ## Future Enhancements (NEW VERSION Only)
 - **Scoring system**: Developing an algorithm that better rewards points based on distance. For example, I do not the only way of achieving a perfect score to be if the player marks the coordinates to the dot. There should be some lee-way
