@@ -21,7 +21,7 @@ There are currently two version. **The "NEW VERSION" is work in progress, and is
 
 ## How to play Old Version
 There are currently two version. **The "OLD VERSION" is no longer supported, and will not receive any more updates.
-1. Go to the NEW VERSION folder
+1. Go to the OLD VERSION folder
 2. Double click the **main.html** file to open the file in your browser.
 3. Click the Play button on the main screen.
 4. A random in-game location will be selected. It can be viewed from the grey "Show Location" button which you should be able to see at the bottom of the screen.
