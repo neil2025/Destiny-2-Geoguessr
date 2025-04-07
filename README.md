@@ -12,7 +12,7 @@ Destiny 2 Geoguessr is a fan-made web-based game inspired by GeoGuessr, where yo
 ## How to play New Version
 There are currently two version. **The "NEW VERSION" is work in progress, and is not polished at all.**
 1. Go to the NEW VERSION folder
-2. Double click the **index.html** file to open the file in your browser.
+2. Double click the **OPEN_THIS_TO_PLAY.html** file to open the file in your browser.
 3. Press "Play" to start the game. A location should be located on your screen, and if you scroll down there will be a bunch of buttons, each of which will open up their respective map.
 4. Mark your guess on which map and where on the map you think the picture is taken from, by clicking on the map with your mouse.
 5. Press "submit" to submit your guess.
