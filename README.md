@@ -55,6 +55,8 @@ There are currently two version. **The "OLD VERSION" is no longer supported, and
 
 ## Credits
 This project is a fan-made tribute to Destiny 2 and is not affiliated with Bungie.
+All Maps are stitched together screenshots from **Braytech.org**. It is a fantastic website, and all rights go to them. Please make sure to check them out
+
 Thank you so much to GTA (not the game) for helping me out with taking photos of the locations. He saved me hours of work, and I am eternally grateful!
 His Bungie ID: Gta85, The Bulk Chicken#9599
 
