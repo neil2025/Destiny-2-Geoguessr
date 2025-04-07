@@ -29,7 +29,10 @@
     const percentage = (totalScore / 5000) * 100;
     scoreMeter.style.setProperty('--value', `${percentage}%`);
 
-    if (totalScore > 4500) {
+    if (totalScore > 4000 && totalScore < 4750) {
+        scoreMeter.classList.add('platinum-glow');
+    }
+    if (totalScore >= 4750) {
         scoreMeter.classList.add('golden-glow');
     }
 

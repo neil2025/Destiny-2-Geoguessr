@@ -430,7 +430,8 @@ h1 {
 
 /* Firefox version */
 #score-meter::-moz-progress-bar {
-    background: linear-gradient(90deg, #00ffff, #0066ff);
+    /*background: linear-gradient(90deg, #00ffff, #0066ff);*/
+    background: linear-gradient(90deg, #50c878, #2e8b57);
     border-radius: 15px;
     box-shadow: 0 0 10px #00ffff, 0 0 20px #0066ff, 0 0 30px #00ffff;
     animation: pulseBarGlow 2s infinite ease-in-out;
@@ -454,7 +455,19 @@ h1 {
     box-shadow: 0 0 10px #ffd700, 0 0 20px #ff8c00, 0 0 30px #ffd700;
 }
 
+/* Firefox version */
 #score-meter.golden-glow::-moz-progress-bar {
     background: linear-gradient(90deg, #ffd700, #ff8c00);
     box-shadow: 0 0 10px #ffd700, 0 0 20px #ff8c00, 0 0 30px #ffd700;
+}
+
+#score-meter.platinum-glow::-webkit-progress-value {
+    background: linear-gradient(90deg, #92f7b4, #0acf61);
+    box-shadow: 0 0 10px #50c878, 0 0 20px #0acf61, 0 0 30px #92f7b4;
+}
+
+/* Firefox version */
+#score-meter.platinum-glow::-moz-progress-bar {
+    background: linear-gradient(90deg, #92f7b4, #0acf61);
+    box-shadow: 0 0 10px #50c878, 0 0 20px #0acf61, 0 0 30px #92f7b4;
 }
