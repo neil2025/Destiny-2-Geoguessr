@@ -7,13 +7,17 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
-    <h1>Destiny 2 GeoGuessr</h1>
-    <button id="play-button">Play</button>
+<div class="container" style="text-align: center; margin-top: 20px;">
+        <h1 id="game-title">Destiny 2 GeoGuessr</h1>
+        <button id="play-button">Play</button>
+        <img id="developer-image" src="assets/dove.png" alt="Game Image" style="margin-top: 20px;">
+        <p id="developer-info" style="margin-top: 10px;">Developed by Niklas Bo Hedehus</p>
 </div>
+
 <script>
     document.getElementById('play-button').addEventListener('click', function() {
         window.location.href = 'game.html';
     });
 </script>
 </body>
+</html>

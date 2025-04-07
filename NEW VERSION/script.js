@@ -50,10 +50,16 @@ function loadRound() {
     maps.forEach(mapName => {
         const button = document.createElement('button');
         button.innerText = mapDisplayNames[mapName];
+        button.classList.add('map-button');
+
+        const className = `map-${mapName.toLowerCase().replace(/[^a-z0-9]/gi, '')}`;
+        button.classList.add(className);
+
         button.addEventListener('click', () => {
             guessedMap = mapName;
             openMapModal(mapName, location);
         });
+
         mapButtons.appendChild(button);
     });
 }

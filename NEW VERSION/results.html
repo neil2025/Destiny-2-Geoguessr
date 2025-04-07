@@ -6,10 +6,14 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
+<div class="results-container">
     <h1>Game Results</h1>
-    <p id="total-score">Total Score: 0 / 5000</p>
     <div id="round-scores"></div>
+    <p id="total-score">Total Score: 0 / 5000</p>
+    <div class="progress-container">
+        <progress id="score-meter" value="0" max="5000"></progress>
+    </div>
+
     <button id="back-button">Back to Main Menu</button>
 </div>
 <script>
@@ -17,18 +21,38 @@
         window.location.href = 'index.html';
     });
 
-    // Display the total score
     const totalScore = localStorage.getItem('totalScore') || 0;
     document.getElementById('total-score').innerHTML = `<strong>Total Score: ${totalScore} / 5000</strong>`;
+    const scoreMeter = document.getElementById('score-meter');
+    scoreMeter.value = totalScore;
 
-    // Display the scores for each round
+    const percentage = (totalScore / 5000) * 100;
+    scoreMeter.style.setProperty('--value', `${percentage}%`);
+
+    if (totalScore > 4500) {
+        scoreMeter.classList.add('golden-glow');
+    }
+
     const roundScores = JSON.parse(localStorage.getItem('roundScores')) || [];
     const roundScoresContainer = document.getElementById('round-scores');
+
+    let highestScore = 0;
+    let highestScoreIndex = -1;
+
     roundScores.forEach((score, index) => {
         const roundScoreElement = document.createElement('p');
         roundScoreElement.innerText = `Round ${index + 1}: ${score} points`;
         roundScoresContainer.appendChild(roundScoreElement);
+
+        if (score > highestScore) {
+            highestScore = score;
+            highestScoreIndex = index;
+        }
     });
+
+    if (highestScoreIndex !== -1) {
+        roundScoresContainer.children[highestScoreIndex].classList.add('highest-score');
+    }
 </script>
 </body>
 </html>
