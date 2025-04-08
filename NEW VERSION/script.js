@@ -100,8 +100,16 @@ function initializeMap(mapName, location) {
     const img = new Image();
     img.onload = function() {
         const imageBounds = [[0, 0], [img.height, img.width]];
+
+        const extendedBounds = [
+            [-150, -150],
+            [img.height + 150, img.width + 150]
+        ];
+
         L.imageOverlay(imageUrl, imageBounds).addTo(map);
         map.fitBounds(imageBounds);
+
+        map.setMaxBounds(extendedBounds);
     };
     img.src = imageUrl;
 
