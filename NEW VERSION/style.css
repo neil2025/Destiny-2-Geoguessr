@@ -358,13 +358,12 @@ html, body {
     box-shadow: 0 0 15px rgba(0,0,0,0.4);
 }
 
-#developer-info {
-    font-size: 16px;
-    color: #00ffff;
+.developer-info {
     margin-top: 10px;
-    text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff;
+    font-size: 1.5rem;
     font-weight: bold;
-    letter-spacing: 1px;
+    color: #ffffff;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
 }
 
 #developer-image {
