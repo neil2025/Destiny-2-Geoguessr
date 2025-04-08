@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (window.location.pathname.includes("map-viewer.html")) {
         initializeFromUrl();
     }
-    
+
     // Event Listeners for Buttons (Index and Map Viewer)
     document.getElementById('back-button')?.addEventListener('click', goBack);
     document.getElementById('submit-button')?.addEventListener('click', submitCoordinates);
@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('keydown', function(event) {
     // Closes the image modal and results popup when Escape is pressed
     if (event.key === 'Escape') {
-        closeModal();  
-        closePopup();  
+        closeModal();
+        closePopup();
     }
 });
 
@@ -210,7 +210,7 @@ function showPopup(title, message, correctLatLng, showPlayAgain) {
 
     map.off('click', placeMarker);
     currentMarker.setOpacity(0.5);
-    
+
     document.getElementById('submit-button').style.display = 'none';
     document.getElementById('play-again-button').style.display = 'block';
     document.getElementById('back-button').style.display = 'none';
