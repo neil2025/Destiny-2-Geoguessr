@@ -29,7 +29,7 @@ function loadRound() {
     document.getElementById('score-info').innerText = `Score: ${totalScore}`;
 
     const location = getRandomLocation();
-    document.getElementById('location-img').src = `images/${location.image}`;
+    document.getElementById('location-img').src = `images/${location.map.toLowerCase()}/${location.image}`;
 
     const mapButtons = document.getElementById('map-buttons');
     mapButtons.innerHTML = '';
@@ -92,7 +92,7 @@ function initializeMap(mapName, location) {
 
     map = L.map('map', {
         crs: L.CRS.Simple,
-        maxZoom: 5,
+        maxZoom: 7,
         minZoom: -1,
     }).setView([500, 500], 1);
 
@@ -307,7 +307,8 @@ function openLocationImage(mapName) {
     };
 
     const image = document.createElement('img');
-    image.src = `images/${mapName}`;
+    const baseMapName = mapName.replace(/\d+\.png$/, '');
+    image.src = `images/${baseMapName}/${mapName}`;
     image.className = 'location-image';
 
     imageContent.appendChild(closeBtn);
@@ -315,14 +316,6 @@ function openLocationImage(mapName) {
     imageModal.appendChild(imageContent);
     document.body.appendChild(imageModal);
 }
-
-function closeLocationImage() {
-    const imageModal = document.querySelector('.image-modal');
-    if (imageModal) {
-        imageModal.style.display = 'none';
-    }
-}
-
 function closeLocationImage() {
     const imageModal = document.querySelector('.image-modal');
     if (imageModal) {
