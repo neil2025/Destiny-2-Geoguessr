@@ -127,7 +127,14 @@ function placeMarker(e) {
         map.removeLayer(currentMarker);
     }
 
-    currentMarker = L.marker(latLng).addTo(map);
+    const redMarkerIcon = L.icon({
+        iconUrl: 'icons/red-marker-icon.png',
+        iconSize: [30, 45],
+        iconAnchor: [15, 45],
+        popupAnchor: [0, -45],
+    });
+
+    currentMarker = L.marker(latLng, { icon: redMarkerIcon }).addTo(map);
 
     const submitButton = document.getElementById('submit-button');
     submitButton.style.display = 'block';
