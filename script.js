@@ -24,7 +24,7 @@ function loadRound(imageFolder, mode) {
 
     const timerDisplay = document.getElementById('timer-display');
     if (timerDisplay) {
-        timerDisplay.innerText = ''; // Reset the timer display
+        timerDisplay.innerText = '';
     }
 
     document.getElementById('round-info').innerText = `Round ${currentRound} of 5`;
@@ -69,10 +69,9 @@ function loadRound(imageFolder, mode) {
 }
 
 function openMapModal(mapName, location, imageFolder) {
-    const modal = document.getElementById('map-modal'); // Ensure modal is defined
-    const modalContent = modal.querySelector('.modal-content'); // Now this will work
+    const modal = document.getElementById('map-modal');
+    const modalContent = modal.querySelector('.modal-content');
 
-    // Check if the button already exists
     if (!modalContent.querySelector('.view-image-btn')) {
         const viewImageBtn = document.createElement('button');
         viewImageBtn.className = 'view-image-btn';
@@ -84,7 +83,6 @@ function openMapModal(mapName, location, imageFolder) {
         };
     }
 
-    // Define the keydown listener
     keydownListener = (event) => {
         if (event.key === 'Tab') {
             if (mapName && location && location.image) {
@@ -99,7 +97,6 @@ function openMapModal(mapName, location, imageFolder) {
         }
     };
 
-    // Add the keydown listener
     document.addEventListener('keydown', keydownListener);
 
     guessedMap = mapName;
@@ -109,9 +106,8 @@ function openMapModal(mapName, location, imageFolder) {
     closeBtn.onclick = () => {
         modal.style.display = 'none';
         guessedMap = '';
-        document.removeEventListener('keydown', keydownListener); // Remove listener on close
+        document.removeEventListener('keydown', keydownListener);
 
-        // Remove the "View Location Image" button
         const viewImageBtn = modalContent.querySelector('.view-image-btn');
         if (viewImageBtn) {
             viewImageBtn.remove();
@@ -122,9 +118,8 @@ function openMapModal(mapName, location, imageFolder) {
         if (event.target === modal) {
             modal.style.display = 'none';
             guessedMap = '';
-            document.removeEventListener('keydown', keydownListener); // Remove listener on close
+            document.removeEventListener('keydown', keydownListener);
 
-            // Remove the "View Location Image" button
             const viewImageBtn = modalContent.querySelector('.view-image-btn');
             if (viewImageBtn) {
                 viewImageBtn.remove();
@@ -262,7 +257,6 @@ function calculatePoints(distance, mapName, timeRemaining) {
 
 
 function showRoundSummary(guessedCoordinates, actualCoordinates, points, distance, mapName, locationImage, timeUp = false) {
-    // Remove the keydown listener to prevent further submissions
     if (keydownListener) {
         document.removeEventListener('keydown', keydownListener);
         keydownListener = null;
@@ -297,7 +291,7 @@ function showRoundSummary(guessedCoordinates, actualCoordinates, points, distanc
     nextBtn.onclick = () => {
         summaryModal.style.display = 'none';
         if (map && currentMarker) {
-            map.removeLayer(currentMarker); // Ensure map and currentMarker are defined
+            map.removeLayer(currentMarker);
         }
         loadRound(imageFolder, mode);
     };
@@ -451,29 +445,26 @@ function startTimer(duration, onTimeUp) {
     const timerDisplay = document.getElementById('timer-display');
     let progressContainer = document.getElementById('timer-progress-container');
 
-    // Ensure timer display is visible
     if (timerDisplay) {
         timerDisplay.style.display = 'block';
         timerDisplay.style.color = 'white';
     }
 
-    // Create progress container if it doesn't exist
     if (!progressContainer) {
         progressContainer = document.createElement('div');
         progressContainer.id = 'timer-progress-container';
         document.body.appendChild(progressContainer);
     } else {
-        progressContainer.style.display = 'block'; // Ensure it's visible
+        progressContainer.style.display = 'block';
     }
 
-    // Create progress bar if it doesn't exist
     let progressBar = document.getElementById('timer-progress-bar');
     if (!progressBar) {
         progressBar = document.createElement('div');
         progressBar.id = 'timer-progress-bar';
         progressContainer.appendChild(progressBar);
     } else {
-        progressBar.style.display = 'block'; // Ensure it's visible
+        progressBar.style.display = 'block';
     }
 
     let timeRemaining = duration;
