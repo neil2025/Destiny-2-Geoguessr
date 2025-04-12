@@ -72,16 +72,19 @@ function openMapModal(mapName, location, imageFolder) {
     const modal = document.getElementById('map-modal');
     const modalContent = modal.querySelector('.modal-content');
 
-    if (!modalContent.querySelector('.view-image-btn')) {
-        const viewImageBtn = document.createElement('button');
-        viewImageBtn.className = 'view-image-btn';
-        viewImageBtn.innerHTML = 'View Location Image';
-        modalContent.appendChild(viewImageBtn);
-
-        viewImageBtn.onclick = () => {
-            openLocationImage(imageFolder, location.image);
-        };
+    const existingViewImageBtn = modalContent.querySelector('.view-image-btn');
+    if (existingViewImageBtn) {
+        existingViewImageBtn.remove();
     }
+
+    const viewImageBtn = document.createElement('button');
+    viewImageBtn.className = 'view-image-btn';
+    viewImageBtn.innerHTML = 'View Location Image';
+    modalContent.appendChild(viewImageBtn);
+
+    viewImageBtn.onclick = () => {
+        openLocationImage(imageFolder, location.image);
+    };
 
     keydownListener = (event) => {
         if (event.key === 'Tab') {
@@ -233,20 +236,16 @@ function calculatePoints(distance, mapName, timeRemaining) {
     }
 
     const maxPoints = 1500;
-    const perfectRadius = 40;
-    const falloffRadius = 500;
+    const perfectRadius = 50;
     const totalTime = 45;
 
     let score;
+
     if (distance <= perfectRadius) {
         return maxPoints;
-    } else if (distance > falloffRadius) {
-        const tailScore = Math.max(1, 300 - 0.1 * (distance - falloffRadius));
-        score = Math.max(1, Math.ceil(tailScore));
     } else {
-        const decay = (distance - perfectRadius) / (falloffRadius - perfectRadius);
-        score = maxPoints * Math.pow(1 - decay, 2);
-        score = Math.ceil(score);
+        const decayFactor = 0.002;
+        score = Math.ceil(maxPoints * Math.exp(-decayFactor * (distance - perfectRadius)));
     }
 
     const timePenalty = ((totalTime - timeRemaining) / totalTime) * maxPoints * 0.2;
