@@ -638,7 +638,7 @@ h2 {
 .mode-button.hard:hover {
     background-image: url('assets/hard-mode-background-2.png');
     transform: scale(1.05);
-    background-color: #c1b362;
+    background-color: #c9a05e;
 }
 
 .mode-button.pvp:hover {
