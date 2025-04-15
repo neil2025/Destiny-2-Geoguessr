@@ -3,7 +3,7 @@ const imageDirectory = 'assets/thank-you';
 const imageFiles = [
     { fileName: 'ashtral.png', caption: 'Ashtral', subcaption: 'For helping me create all the maps'},
     { fileName: 'gta.png', caption: 'Gta85', subcaption: 'For capturing the first many locations, which came with version 1 of the game' },
-    { fileName: 'matt.png', caption: 'Matt', subcaption: 'For setting up the site to play on' },
+    { fileName: 'matt.png', caption: 'Matt', subcaption: 'For bringing the game into an online version' },
     { fileName: 'slasher.png', caption: 'Slasher', subcaption: 'For helping with locations' },
     { fileName: 'julia.png', caption: 'Julia', subcaption: 'For helping with the discord, locations, and being endlessly supportive' },
 ];
