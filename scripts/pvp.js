@@ -1,3 +1,10 @@
+/*
+Since this is for PvP, perhaps make a separate html, if I plan on handling things differently.
+If I want to handle things the same, this should be removed, and I should just use script.js,
+and just make adjustments to account for PvP. But I'm more keen to separate them, that way I can
+likely more easily do it for Datto's mode as well, and raids when that comes in the future too
+*/
+
 let timerInterval, remainingTime, map, keydownListener, locationImageKeydownListener;
 let currentRound = 1;
 let totalScore = 0;
@@ -30,18 +37,20 @@ function loadRound(imageFolder, mode) {
     document.getElementById('round-info').innerText = `Round ${currentRound} of 5`;
     document.getElementById('score-info').innerText = `Score: ${totalScore}`;
 
+    //Should be changed
     const location = getRandomLocation(mode);
     document.getElementById('location-img').src = `${imageFolder}/${location.map.toLowerCase()}/${location.image}`;
 
-    startTimer(45, () => onTimeUp(location));
+    startTimer(30, () => onTimeUp(location));
 
     const mapButtons = document.getElementById('map-buttons');
     mapButtons.innerHTML = '';
 
     const mapDisplayNames = {
-        /* add map display names here */
+        "javelin4" : "Javelin-4", //example
     };
 
+    //Might want to change this to be a drop-down menu instead of having like 20 maps. Or a tab version perhaps.
     const maps = Object.keys(mapDisplayNames);
     maps.forEach(mapName => {
         const button = document.createElement('button');
@@ -69,9 +78,9 @@ function getRandomLocation(mode) {
 
 function startGame() {
     const urlParams = new URLSearchParams(window.location.search);
-    const mode = urlParams.get('mode') || 'pvp';
+    const mode = urlParams.get('mode') || 'pvp'; //not sure if this is necessary
 
-    let imageFolder = 'pvp_images'; // PvP-specific images
+    let imageFolder = 'pvp_images';
     loadRound(imageFolder, mode);
 }
 
@@ -102,7 +111,7 @@ function openMapModal(mapName, location, imageFolder) {
     keydownListener = (event) => {
         if (event.key === 'Tab') {
             if (mapName && location && location.image) {
-                openLocationImage(`${imageFolder}`, location.image);
+                openLocationImage(`${imageFolder}`, location.image); //Might need adjusting, not sure
             } else {
                 alert('Error: Map name or location image is undefined.');
             }
@@ -112,7 +121,7 @@ function openMapModal(mapName, location, imageFolder) {
             submitGuess(location);
         }
     };
-
+    //is this in the correct place?
     document.addEventListener('keydown', keydownListener);
 
     guessedMap = mapName;
@@ -120,7 +129,7 @@ function openMapModal(mapName, location, imageFolder) {
 
     const closeBtn = document.querySelector('.close-btn');
     closeBtn.onclick = () => {
-        modal.style.display = 'none';
+        modal.style.display = 'none'; //should this be modal close?
         guessedMap = '';
         document.removeEventListener('keydown', keydownListener);
 
@@ -132,7 +141,7 @@ function openMapModal(mapName, location, imageFolder) {
 
     window.onclick = (event) => {
         if (event.target === modal) {
-            modal.style.display = 'none';
+            modal.style.display = 'none'; //should this be modal close?
             guessedMap = '';
             document.removeEventListener('keydown', keydownListener);
 
@@ -156,7 +165,7 @@ function initializeMap(mapName, location) {
         minZoom: -1,
     }).setView([500, 500], 1);
 
-    const imageUrl = `maps/${mapName}.png`;
+    const imageUrl = `pvp_maps/${mapName}.png`; //changed to PvP
     const img = new Image();
     img.onload = function() {
         const imageBounds = [[0, 0], [img.height, img.width]];
@@ -241,14 +250,15 @@ function calculateDistance(guessedCoordinates, actualCoordinates) {
     return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 }
 
+//Might need to adjust points calculation
 function calculatePoints(distance, mapName, timeRemaining) {
     if (guessedMap !== mapName || timeRemaining === 0) {
         return 0;
     }
 
     const maxPoints = 1500;
-    const perfectRadius = 50;
-    const totalTime = 45;
+    const perfectRadius = 15; //lowered due to smaller maps
+    const totalTime = 30;
 
     let score;
 
@@ -290,13 +300,11 @@ function showRoundSummary(guessedCoordinates, actualCoordinates, points, distanc
     viewImageBtn.className = 'view-image-btn';
     viewImageBtn.innerHTML = 'View Location Image';
 
+    //might not be necessary
     const urlParams = new URLSearchParams(window.location.search);
     const mode = urlParams.get('mode') || 'normal';
 
-    let imageFolder = 'images';
-    if (mode === 'hard') {
-        imageFolder = 'hard_images';
-    }
+    let imageFolder = 'pvp_images';
 
     nextBtn.onclick = () => {
         summaryModal.style.display = 'none';
@@ -317,17 +325,10 @@ function showRoundSummary(guessedCoordinates, actualCoordinates, points, distanc
     mapContainer.style.margin = '0 auto';
 
     const mapDisplayNames = {
-        'Cosmodrome': 'Cosmodrome',
-        'DreamingCity': 'The Dreaming City',
-        'EDZ': 'EDZ',
-        'Europa': 'Europa',
-        'Moon': 'Moon',
-        'Neomuna': 'Neomuna',
-        'Nessus': 'Nessus',
-        'STW': 'Savathun\'s Throne World',
-        'TPH': 'The Pale Heart'
+         "javelin4" : "Javelin - 4" //Should be the same as the other display names
     };
 
+    //should not be an "or" if I map everything
     const guessedMapDisplayName = mapDisplayNames[guessedMap] || guessedMap;
     const actualMapDisplayName = mapDisplayNames[mapName] || mapName;
 
@@ -335,7 +336,7 @@ function showRoundSummary(guessedCoordinates, actualCoordinates, points, distanc
     if (timeUp) {
         summaryText.innerText = `Sorry! Time is up! \nYou earned 0 points.\n`;
     } else if (guessedMap !== mapName) {
-        summaryText.innerText = `Sorry! Wrong planet :( \nYou guessed ${guessedMapDisplayName} but the correct location was on ${actualMapDisplayName}.\n You earned 0 points.\n`;
+        summaryText.innerText = `Sorry! Wrong map :( \nYou guessed ${guessedMapDisplayName} but the correct location was on ${actualMapDisplayName}.\n You earned 0 points.\n`;
     } else {
         if (points === 1500) {
             summaryText.innerHTML = `You were ${distance.toFixed(2)} units away from the correct location. You earned <span class="golden-glow">${points}</span> points.\n`;
@@ -356,7 +357,7 @@ function showRoundSummary(guessedCoordinates, actualCoordinates, points, distanc
         maxZoom: 5,
         minZoom: -1,
     }).setView([500, 500], 1);
-    const imageUrl = `maps/${mapName}.png`;
+    const imageUrl = `pvp_maps/${mapName}.png`;
     const img = new Image();
     img.onload = function() {
         const imageBounds = [[0, 0], [img.height, img.width]];
@@ -430,7 +431,7 @@ function openLocationImage(imageFolder, mapName) {
 function closeLocationImage() {
     const imageModal = document.querySelector('.image-modal');
     if (imageModal) {
-        imageModal.style.display = 'none';
+        imageModal.style.display = 'none'; //should be removed?
         imageModal.remove();
     }
 
@@ -481,6 +482,7 @@ function startTimer(duration, onTimeUp) {
             progressBar.style.backgroundColor = 'red';
         }
 
+        //could maybe use a 1 second delay, also remember this for script.js
         if (timeRemaining <= 0) {
             clearInterval(timerInterval);
             progressBar.style.transform = 'scaleX(0)';
@@ -491,6 +493,7 @@ function startTimer(duration, onTimeUp) {
     }, 1000);
 }
 
+//could maybe do some optimization on formatiing time, here as well as in script.js
 function formatTime(seconds) {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;

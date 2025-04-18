@@ -33,7 +33,7 @@ function loadRound(imageFolder, mode) {
     const location = getRandomLocation(mode);
     document.getElementById('location-img').src = `${imageFolder}/${location.map.toLowerCase()}/${location.image}`;
 
-    startTimer(45, () => onTimeUp(location));
+    startTimer(30, () => onTimeUp(location));
 
     const mapButtons = document.getElementById('map-buttons');
     mapButtons.innerHTML = '';
@@ -237,7 +237,7 @@ function calculatePoints(distance, mapName, timeRemaining) {
 
     const maxPoints = 1500;
     const perfectRadius = 50;
-    const totalTime = 45;
+    const totalTime = 30;
 
     let score;
 
