@@ -1,87 +1,76 @@
-/*
-Since this is for PvP, perhaps make a separate html, if I plan on handling things differently.
-If I want to handle things the same, this should be removed, and I should just use script.js,
-and just make adjustments to account for PvP. But I'm more keen to separate them, that way I can
-likely more easily do it for Datto's mode as well, and raids when that comes in the future too
-*/
-
-let timerInterval, remainingTime, map, keydownListener, locationImageKeydownListener;
+let timerInterval, remainingTime, locationImageKeydownListener;
 let currentRound = 1;
 let totalScore = 0;
-let currentMarker = null;
-let guessedMap = '';
 let roundScores = [];
+let selectedMap = '';
+let currentMarker = null;
+let map = null;
+keydownListener = null
 
 document.addEventListener('DOMContentLoaded', () => {
-    if (window.location.pathname.includes('game.html')) {
+    if (window.location.pathname.includes('pvp.html')) {
+        setupMapDropdown();
         startGame();
     }
 });
 
-function loadRound(imageFolder, mode) {
+function loadRound() {
     if (currentRound > 5) {
         endGame();
         return;
     }
 
-    const existingProgressBar = document.getElementById('timer-progress-bar');
-    if (existingProgressBar) {
-        existingProgressBar.remove();
-    }
+    document.getElementById('round-info').textContent = `Round ${currentRound} of 5`;
+    document.getElementById('score-info').textContent = `Score: ${totalScore}`;
 
-    const timerDisplay = document.getElementById('timer-display');
-    if (timerDisplay) {
-        timerDisplay.innerText = '';
-    }
+    const location = getRandomLocation();
+    document.getElementById('location-img').src = `pvp_images/${location.map}/${location.image}`;
 
-    document.getElementById('round-info').innerText = `Round ${currentRound} of 5`;
-    document.getElementById('score-info').innerText = `Score: ${totalScore}`;
-
-    //Should be changed
-    const location = getRandomLocation(mode);
-    document.getElementById('location-img').src = `${imageFolder}/${location.map.toLowerCase()}/${location.image}`;
-
-    startTimer(30, () => onTimeUp(location));
-
-    const mapButtons = document.getElementById('map-buttons');
-    mapButtons.innerHTML = '';
-
-    const mapDisplayNames = {
-        "javelin4" : "Javelin-4", //example
-    };
-
-    //Might want to change this to be a drop-down menu instead of having like 20 maps. Or a tab version perhaps.
-    const maps = Object.keys(mapDisplayNames);
-    maps.forEach(mapName => {
-        const button = document.createElement('button');
-        button.innerText = mapDisplayNames[mapName];
-        button.classList.add('map-button');
-
-        const className = `map-${mapName.toLowerCase().replace(/[^a-z0-9]/gi, '')}`;
-        button.classList.add(className);
-
-        button.addEventListener('click', () => {
-            guessedMap = mapName;
-            openMapModal(mapName, location, imageFolder);
-        });
-
-        mapButtons.appendChild(button);
-    });
+    startTimer(5, () => onTimeUp(location));
+    document.getElementById('submit-button').style.display = 'none';
 }
 
 function getRandomLocation(mode) {
-    let locationPool = pvpLocations; // Use PvP-specific locations
+    let locationPool = pvpLocations;
 
     const randomIndex = Math.floor(Math.random() * locationPool.length);
     return locationPool[randomIndex];
 }
 
-function startGame() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const mode = urlParams.get('mode') || 'pvp'; //not sure if this is necessary
+function setupMapDropdown() {
+    const dropdown = document.getElementById('map-dropdown');
+    const mapDisplayNames = {
+        "javelin": "Javelin-4",
+        // Add more maps here
+    };
 
-    let imageFolder = 'pvp_images';
-    loadRound(imageFolder, mode);
+    dropdown.innerHTML = '<option value="" disabled selected>Select a map</option>';
+    Object.entries(mapDisplayNames).forEach(([value, text]) => {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = text;
+        dropdown.appendChild(option);
+    });
+
+    dropdown.addEventListener('change', (event) => {
+        selectedMap = event.target.value;
+        updateMapDisplay(selectedMap);
+    });
+}
+
+function startGame() {
+    loadRound();
+    document.getElementById('submit-button').addEventListener('click', () => {
+        if (!selectedMap) {
+            alert('Please select a map first!');
+            return;
+        }
+        if (!currentMarker) {
+            alert('Please place a marker on the map!');
+            return;
+        }
+        submitGuess(getRandomLocation());
+    });
 }
 
 function endGame() {
@@ -90,70 +79,7 @@ function endGame() {
     localStorage.setItem('gameMode', mode);
     window.location.href = 'results.html';
 }
-function openMapModal(mapName, location, imageFolder) {
-    const modal = document.getElementById('map-modal');
-    const modalContent = modal.querySelector('.modal-content');
 
-    const existingViewImageBtn = modalContent.querySelector('.view-image-btn');
-    if (existingViewImageBtn) {
-        existingViewImageBtn.remove();
-    }
-
-    const viewImageBtn = document.createElement('button');
-    viewImageBtn.className = 'view-image-btn';
-    viewImageBtn.innerHTML = 'View Location Image';
-    modalContent.appendChild(viewImageBtn);
-
-    viewImageBtn.onclick = () => {
-        openLocationImage(imageFolder, location.image);
-    };
-
-    keydownListener = (event) => {
-        if (event.key === 'Tab') {
-            if (mapName && location && location.image) {
-                openLocationImage(`${imageFolder}`, location.image); //Might need adjusting, not sure
-            } else {
-                alert('Error: Map name or location image is undefined.');
-            }
-        } else if (event.key === 'Escape') {
-            closeLocationImage();
-        } else if (event.key === 'Enter') {
-            submitGuess(location);
-        }
-    };
-    //is this in the correct place?
-    document.addEventListener('keydown', keydownListener);
-
-    guessedMap = mapName;
-    modal.style.display = 'block';
-
-    const closeBtn = document.querySelector('.close-btn');
-    closeBtn.onclick = () => {
-        modal.style.display = 'none'; //should this be modal close?
-        guessedMap = '';
-        document.removeEventListener('keydown', keydownListener);
-
-        const viewImageBtn = modalContent.querySelector('.view-image-btn');
-        if (viewImageBtn) {
-            viewImageBtn.remove();
-        }
-    };
-
-    window.onclick = (event) => {
-        if (event.target === modal) {
-            modal.style.display = 'none'; //should this be modal close?
-            guessedMap = '';
-            document.removeEventListener('keydown', keydownListener);
-
-            const viewImageBtn = modalContent.querySelector('.view-image-btn');
-            if (viewImageBtn) {
-                viewImageBtn.remove();
-            }
-        }
-    };
-
-    initializeMap(mapName, location);
-}
 function initializeMap(mapName, location) {
     if (map) {
         map.remove();
@@ -165,7 +91,7 @@ function initializeMap(mapName, location) {
         minZoom: -1,
     }).setView([500, 500], 1);
 
-    const imageUrl = `pvp_maps/${mapName}.png`; //changed to PvP
+    const imageUrl = `pvp_maps/${mapName}.png`;
     const img = new Image();
     img.onload = function() {
         const imageBounds = [[0, 0], [img.height, img.width]];
@@ -188,24 +114,20 @@ function initializeMap(mapName, location) {
     submitButton.style.display = 'none';
     submitButton.onclick = () => submitGuess(location);
 }
-function placeMarker(e) {
-    const latLng = e.latlng;
 
+function placeMarker(e, map) {
     if (currentMarker) {
         map.removeLayer(currentMarker);
     }
 
-    const redMarkerIcon = L.icon({
+    const markerIcon = L.icon({
         iconUrl: 'icons/marker.png',
         iconSize: [30, 45],
-        iconAnchor: [15, 45],
-        popupAnchor: [0, -45],
+        iconAnchor: [15, 45]
     });
 
-    currentMarker = L.marker(latLng, { icon: redMarkerIcon }).addTo(map);
-
-    const submitButton = document.getElementById('submit-button');
-    submitButton.style.display = 'block';
+    currentMarker = L.marker(e.latlng, { icon: markerIcon }).addTo(map);
+    document.getElementById('submit-button').style.display = 'block';
 }
 
 function submitGuess(location, timeUp = false) {
@@ -250,14 +172,13 @@ function calculateDistance(guessedCoordinates, actualCoordinates) {
     return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 }
 
-//Might need to adjust points calculation
 function calculatePoints(distance, mapName, timeRemaining) {
     if (guessedMap !== mapName || timeRemaining === 0) {
         return 0;
     }
 
     const maxPoints = 1500;
-    const perfectRadius = 15; //lowered due to smaller maps
+    const perfectRadius = 10;
     const totalTime = 30;
 
     let score;
@@ -265,11 +186,11 @@ function calculatePoints(distance, mapName, timeRemaining) {
     if (distance <= perfectRadius) {
         return maxPoints;
     } else {
-        const decayFactor = 0.002;
+        const decayFactor = 0.01;
         score = Math.ceil(maxPoints * Math.exp(-decayFactor * (distance - perfectRadius)));
     }
 
-    const timePenalty = ((totalTime - timeRemaining) / totalTime) * maxPoints * 0.2;
+    const timePenalty = ((totalTime - timeRemaining) / totalTime) * maxPoints * 0.3;
     score -= Math.floor(timePenalty);
 
     return Math.max(1, score);
@@ -282,8 +203,8 @@ function showRoundSummary(guessedCoordinates, actualCoordinates, points, distanc
         keydownListener = null;
     }
 
-    const modal = document.getElementById('map-modal');
-    modal.style.display = 'none';
+    const existingModal = document.getElementById('map-modal');
+    if (existingModal) existingModal.style.display = 'none';
 
     const summaryModal = document.createElement('div');
     summaryModal.className = 'modal';
@@ -300,22 +221,16 @@ function showRoundSummary(guessedCoordinates, actualCoordinates, points, distanc
     viewImageBtn.className = 'view-image-btn';
     viewImageBtn.innerHTML = 'View Location Image';
 
-    //might not be necessary
-    const urlParams = new URLSearchParams(window.location.search);
-    const mode = urlParams.get('mode') || 'normal';
-
-    let imageFolder = 'pvp_images';
-
     nextBtn.onclick = () => {
         summaryModal.style.display = 'none';
         if (map && currentMarker) {
             map.removeLayer(currentMarker);
         }
-        loadRound(imageFolder, mode);
+        loadRound();
     };
 
     viewImageBtn.onclick = () => {
-        openLocationImage(imageFolder, locationImage);
+        openLocationImage(`pvp_images/${mapName}`, locationImage);
     };
 
     const mapContainer = document.createElement('div');
@@ -325,18 +240,19 @@ function showRoundSummary(guessedCoordinates, actualCoordinates, points, distanc
     mapContainer.style.margin = '0 auto';
 
     const mapDisplayNames = {
-         "javelin4" : "Javelin - 4" //Should be the same as the other display names
+        "javelin": "Javelin-4",
+        // Add more PvP maps here if you want to prettify names
     };
 
-    //should not be an "or" if I map everything
-    const guessedMapDisplayName = mapDisplayNames[guessedMap] || guessedMap;
+    const guessedMapDisplayName = mapDisplayNames[selectedMap] || selectedMap;
     const actualMapDisplayName = mapDisplayNames[mapName] || mapName;
 
     const summaryText = document.createElement('p');
+
     if (timeUp) {
-        summaryText.innerText = `Sorry! Time is up! \nYou earned 0 points.\n`;
+        summaryText.innerText = `Sorry! Time is up!\nYou earned 0 points.\nThe correct location was on ${actualMapDisplayName}.`;
     } else if (guessedMap !== mapName) {
-        summaryText.innerText = `Sorry! Wrong map :( \nYou guessed ${guessedMapDisplayName} but the correct location was on ${actualMapDisplayName}.\n You earned 0 points.\n`;
+        summaryText.innerText = `Sorry! Wrong map.\nYou guessed ${guessedMapDisplayName}, but the correct location was on ${actualMapDisplayName}.\nYou earned 0 points.`;
     } else {
         if (points === 1500) {
             summaryText.innerHTML = `You were ${distance.toFixed(2)} units away from the correct location. You earned <span class="golden-glow">${points}</span> points.\n`;
@@ -344,7 +260,10 @@ function showRoundSummary(guessedCoordinates, actualCoordinates, points, distanc
             summaryText.innerText = `You were ${distance.toFixed(2)} units away from the correct location. You earned ${points} points.\n`;
         }
     }
+
     summaryText.innerHTML += `<br><strong>Total Score: ${totalScore}</strong>`;
+
+
     summaryContent.appendChild(mapContainer);
     summaryContent.appendChild(summaryText);
     summaryContent.appendChild(viewImageBtn);
@@ -352,14 +271,19 @@ function showRoundSummary(guessedCoordinates, actualCoordinates, points, distanc
     summaryModal.appendChild(summaryContent);
     document.body.appendChild(summaryModal);
 
+    // Initialize the map
     const summaryMap = L.map(mapContainer, {
         crs: L.CRS.Simple,
-        maxZoom: 5,
+        maxZoom: 7,
         minZoom: -1,
+        dragging: false,
+        zoomControl: false,
+        scrollWheelZoom: false
     }).setView([500, 500], 1);
+
     const imageUrl = `pvp_maps/${mapName}.png`;
     const img = new Image();
-    img.onload = function() {
+    img.onload = function () {
         const imageBounds = [[0, 0], [img.height, img.width]];
         L.imageOverlay(imageUrl, imageBounds).addTo(summaryMap);
         summaryMap.fitBounds(imageBounds);
@@ -368,31 +292,56 @@ function showRoundSummary(guessedCoordinates, actualCoordinates, points, distanc
             icon: L.icon({
                 iconUrl: 'icons/flag.png',
                 iconSize: [25, 41],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34],
-                shadowSize: [41, 41]
+                iconAnchor: [12, 41]
             })
         }).addTo(summaryMap);
 
-        summaryMap.setView(actualCoordinates, 0);
+        summaryMap.setView(actualCoordinates, 1);
 
-        if (guessedMap === mapName) {
+        if (selectedMap === mapName && guessedCoordinates) {
             const guessedMarker = L.marker(guessedCoordinates, {
                 icon: L.icon({
                     iconUrl: 'icons/marker.png',
                     iconSize: [25, 41],
-                    iconAnchor: [12, 41],
-                    popupAnchor: [1, -34],
-                    shadowSize: [41, 41]
+                    iconAnchor: [12, 41]
                 })
             }).addTo(summaryMap);
+
             L.polyline([guessedCoordinates, actualCoordinates], { color: 'blue' }).addTo(summaryMap);
         }
     };
     img.src = imageUrl;
 }
 
-function openLocationImage(imageFolder, mapName) {
+
+
+function updateMapDisplay(mapName) {
+    const mapContainer = document.getElementById('static-map');
+    mapContainer.innerHTML = '';
+
+    const map = L.map(mapContainer, {
+        crs: L.CRS.Simple,
+        maxZoom: 7,
+        minZoom: -1,
+        dragging: true,
+        zoomControl: true,
+        scrollWheelZoom: true
+    }).setView([500, 500], 1);
+
+    const imageUrl = `pvp_maps/${mapName}.png`;
+    const img = new Image();
+
+    img.onload = function() {
+        const imageBounds = [[0, 0], [img.height, img.width]];
+        L.imageOverlay(imageUrl, imageBounds).addTo(map);
+        map.fitBounds(imageBounds);
+
+        map.on('click', (e) => placeMarker(e, map));
+    };
+    img.src = imageUrl;
+}
+
+function openLocationImage(imageFolder, locationImage) {
     const imageModal = document.createElement('div');
     imageModal.className = 'image-modal';
     imageModal.style.display = 'block';
@@ -406,8 +355,7 @@ function openLocationImage(imageFolder, mapName) {
     closeBtn.onclick = () => closeLocationImage(imageModal);
 
     const image = document.createElement('img');
-    const baseMapName = mapName.replace(/\d+\.png$/, '');
-    image.src = `${imageFolder}/${baseMapName.toLowerCase()}/${mapName}`;
+    image.src = `${imageFolder}/${locationImage}`;
     image.className = 'location-image';
 
     image.onerror = () => {
@@ -428,10 +376,11 @@ function openLocationImage(imageFolder, mapName) {
     document.addEventListener('keydown', locationImageKeydownListener);
 }
 
+
 function closeLocationImage() {
     const imageModal = document.querySelector('.image-modal');
     if (imageModal) {
-        imageModal.style.display = 'none'; //should be removed?
+        imageModal.style.display = 'none';
         imageModal.remove();
     }
 
@@ -470,26 +419,27 @@ function startTimer(duration, onTimeUp) {
     let timeRemaining = duration;
     timerDisplay.innerText = formatTime(timeRemaining);
 
-    timerInterval = setInterval(() => {
-        timeRemaining--;
-        remainingTime = timeRemaining;
+    setTimeout(() => {
+        timerInterval = setInterval(() => {
+            timeRemaining--;
+            remainingTime = timeRemaining;
 
-        const progressPercentage = Math.max(timeRemaining / duration, 0);
-        progressBar.style.transform = `scaleX(${progressPercentage})`;
+            const progressPercentage = Math.max(timeRemaining / duration, 0);
+            progressBar.style.transform = `scaleX(${progressPercentage})`;
 
-        if (timeRemaining <= 10) {
-            timerDisplay.style.color = 'red';
-            progressBar.style.backgroundColor = 'red';
-        }
+            if (timeRemaining <= 10) {
+                timerDisplay.style.color = 'red';
+                progressBar.style.backgroundColor = 'red';
+            }
 
-        //could maybe use a 1 second delay, also remember this for script.js
-        if (timeRemaining <= 0) {
-            clearInterval(timerInterval);
-            progressBar.style.transform = 'scaleX(0)';
-            onTimeUp();
-        } else {
-            timerDisplay.innerText = formatTime(timeRemaining);
-        }
+            if (timeRemaining <= 0) {
+                clearInterval(timerInterval);
+                progressBar.style.transform = 'scaleX(0)';
+                onTimeUp();
+            } else {
+                timerDisplay.innerText = formatTime(timeRemaining);
+            }
+        }, 1000);
     }, 1000);
 }
 
@@ -516,7 +466,7 @@ function stopTimer() {
 
 function onTimeUp(location) {
     stopTimer();
-    if (currentMarker) {
+    if (currentMarker && map) {
         map.removeLayer(currentMarker);
         currentMarker = null;
     }

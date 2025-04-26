@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destiny 2 GeoGuessr - PvP Mode</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+</head>
+<body>
+<div id="timer-display"></div>
+<div id="timer-progress-container">
+    <div id="timer-progress-bar"></div>
+</div>
+
+<div class="container">
+    <div id="game-title">DESTINY 2 GEOGUESSR</div>
+
+    <div id="game-info">
+        <p id="round-info">Round 1 of 5</p>
+        <p id="score-info">Score: 0</p>
+    </div>
+
+    <div id="location-image">
+        <img id="location-img" src="" alt="Location Image">
+    </div>
+
+    <div class="map-section">
+        <select id="map-dropdown" class="map-dropdown">
+            <option value="" disabled selected>Select a map</option>
+        </select>
+
+        <div id="static-map"></div>
+        <button id="submit-button" style="display: none;">Submit Guess</button>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="scripts/pvp_locations.js"></script>
+<script src="scripts/pvp.js"></script>
+</body>
+</html>
