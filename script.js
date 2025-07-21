@@ -4,6 +4,7 @@ let totalScore = 0;
 let currentMarker = null;
 let guessedMap = '';
 let roundScores = [];
+let seed = prompt("Seed?");
 
 document.addEventListener('DOMContentLoaded', () => {
     if (window.location.pathname.includes('game.html')) {
@@ -429,14 +430,19 @@ function closeLocationImage() {
     }
 }
 
+function seededRandom(seed) {
+    var x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
+}
+
 function getRandomLocation(mode) {
     let locationPool = locations;
 
     if (mode === 'hard') {
         locationPool = hardLocations;
     }
-
-    const randomIndex = Math.floor(Math.random() * locationPool.length);
+    seed = seededRandom(seed);
+    const randomIndex = Math.floor(seed * locationPool.length);
     return locationPool[randomIndex];
 }
 
